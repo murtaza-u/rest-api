@@ -17,3 +17,15 @@ func initDB() (db *gorm.DB) {
     db.AutoMigrate(&User{})
     return db
 }
+
+func createUser(name, dob, address, description string) error {
+    user := User{
+        Name: name,
+        Dob: dob,
+        Address: address,
+        Description: description,
+    }
+    db.Create(&user)
+
+    return nil
+}
