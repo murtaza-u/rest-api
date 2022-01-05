@@ -16,15 +16,7 @@ func get(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    resp := User {
-        ID: user.ID,
-        Name: user.Name,
-        Dob: user.Dob,
-        Address: user.Address,
-        Description: user.Description,
-    }
-
-    if err := json.NewEncoder(w).Encode(resp); err != nil {
+    if err := json.NewEncoder(w).Encode(user); err != nil {
         w.WriteHeader(http.StatusInternalServerError)
         return
     }
@@ -45,7 +37,21 @@ func create(w http.ResponseWriter, r *http.Request) {
 }
 
 func update(w http.ResponseWriter, r *http.Request) {
+    params := mux.Vars(r)
 
+    user, err := getUserByID(params["id"])
+    if err != nil {
+        w.WriteHeader(http.StatusNotFound)
+        return
+    }
+
+    err = json.NewDecoder(r.Body).Decode(&user)
+    if err != nil {
+        w.WriteHeader(http.StatusInternalServerError)
+        return
+    }
+    db.Save(&user)
+    w.WriteHeader(http.StatusOK)
 }
 
 func delete(w http.ResponseWriter, r *http.Request) {
