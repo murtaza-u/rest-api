@@ -1,18 +1,19 @@
 package main
 
 import (
-    "log"
-    "net/http"
+	"fmt"
+	"log"
+	"net/http"
 
-    "gorm.io/gorm"
+	"gorm.io/gorm"
 )
 
 type User struct {
     ID          int    `gorm:"primarykey"`
-    Name        string
-    Dob         string
-    Address     string
-    Description string
+    Name        string `json:"name"`
+    Dob         string `json:"dob"`
+    Address     string `json:"address"`
+    Description string `json:"description"`
     gorm.Model
 }
 
@@ -24,5 +25,6 @@ func main() {
     http.HandleFunc("/update", update)
     http.HandleFunc("/delete", delete)
 
-    log.Fatal(http.ListenAndServe(":8080", nil))
+    fmt.Println("Listening on port :5000")
+    log.Fatal(http.ListenAndServe(":5000", nil))
 }
