@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"gorm.io/gorm"
+    "github.com/gorilla/mux"
 )
 
 type User struct {
@@ -20,11 +21,13 @@ type User struct {
 func main() {
     db = initDB()
 
-    http.HandleFunc("/get", get)
-    http.HandleFunc("/create", create)
-    http.HandleFunc("/update", update)
-    http.HandleFunc("/delete", delete)
+    r := mux.NewRouter()
+
+    r.HandleFunc("/get/{id}", get)
+    r.HandleFunc("/create", create)
+    r.HandleFunc("/update/{id}", update)
+    r.HandleFunc("/delete/{id}", delete)
 
     fmt.Println("Listening on port :5000")
-    log.Fatal(http.ListenAndServe(":5000", nil))
+    log.Fatal(http.ListenAndServe(":5000", r))
 }
