@@ -1,22 +1,24 @@
 package main
 
 import (
-	"log"
-	"net/http"
+    "log"
+    "net/http"
 
-	"gorm.io/gorm"
+    "gorm.io/gorm"
 )
 
 type User struct {
-    id          int    `gorm:"primarykey"`
-    name        string
-    dob         string
-    address     string
-    description string
+    ID          int    `gorm:"primarykey"`
+    Name        string
+    Dob         string
+    Address     string
+    Description string
     gorm.Model
 }
 
 func main() {
+    db = initDB()
+
     http.HandleFunc("/get", get)
     http.HandleFunc("/create", create)
     http.HandleFunc("/update", update)
