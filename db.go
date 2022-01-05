@@ -1,11 +1,11 @@
 package main
 
 import (
-	"errors"
-	"log"
+    "errors"
+    "log"
 
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
+    "gorm.io/driver/sqlite"
+    "gorm.io/gorm"
 )
 
 var db *gorm.DB
@@ -38,4 +38,14 @@ func getUserByName(name string) (User, error) {
         return user, errors.New("user not found")
     }
     return user, nil
+}
+
+func deleteUser(name string) error {
+    user, err := getUserByName(name)
+    if err != nil {
+        return err
+    }
+
+    db.Delete(&user, user.ID)
+    return nil
 }
