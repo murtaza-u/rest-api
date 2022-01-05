@@ -6,7 +6,33 @@ import (
 )
 
 func get(w http.ResponseWriter, r *http.Request) {
+    var user User
+    err := json.NewDecoder(r.Body).Decode(&user)
+    if err != nil {
+        w.WriteHeader(http.StatusInternalServerError)
+        return
+    }
 
+    user, err = getUserByName(user.Name)
+    if err != nil {
+        w.WriteHeader(http.StatusNotFound)
+        return
+    }
+
+    resp := User {
+        ID: user.ID,
+        Name: user.Name,
+        Dob: user.Dob,
+        Address: user.Address,
+        Description: user.Description,
+    }
+
+    if err := json.NewEncoder(w).Encode(resp); err != nil {
+        w.WriteHeader(http.StatusInternalServerError)
+        return
+    }
+
+    w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 }
 
 func create(w http.ResponseWriter, r *http.Request) {

@@ -1,10 +1,11 @@
 package main
 
 import (
-    "log"
+	"errors"
+	"log"
 
-    "gorm.io/driver/sqlite"
-    "gorm.io/gorm"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 var db *gorm.DB
@@ -28,4 +29,13 @@ func createUser(name, dob, address, description string) error {
     db.Create(&user)
 
     return nil
+}
+
+func getUserByName(name string) (User, error) {
+    var user User
+    db.Where("name = ?", name).Find(&user)
+    if len(user.Name) == 0 {
+        return user, errors.New("user not found")
+    }
+    return user, nil
 }
