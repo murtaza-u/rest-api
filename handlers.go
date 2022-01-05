@@ -3,17 +3,14 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func get(w http.ResponseWriter, r *http.Request) {
-    var user User
-    err := json.NewDecoder(r.Body).Decode(&user)
-    if err != nil {
-        w.WriteHeader(http.StatusInternalServerError)
-        return
-    }
+    params := mux.Vars(r)
 
-    user, err = getUserByName(user.Name)
+    user, err := getUserByID(params["id"])
     if err != nil {
         w.WriteHeader(http.StatusNotFound)
         return
@@ -52,14 +49,8 @@ func update(w http.ResponseWriter, r *http.Request) {
 }
 
 func delete(w http.ResponseWriter, r *http.Request) {
-    var user User
-    err := json.NewDecoder(r.Body).Decode(&user)
-    if err != nil {
-        w.WriteHeader(http.StatusInternalServerError)
-        return
-    }
-
-    err = deleteUser(user.Name)
+    params := mux.Vars(r)
+    err := deleteUser(params["id"])
     if err != nil {
         w.WriteHeader(http.StatusNotFound)
         return
