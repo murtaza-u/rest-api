@@ -3,10 +3,12 @@
 ## Framework / toolkit
 Gorilla Mux - [Link](https://github.com/gorilla/mux)
 
+---
 ## Functionality
 1. The API follows typical RESTful API design patterns.
-2. The data is save in the DB
+2. The data is save in a DB
 
+---
 ## Documentation
 
 ### Setting up
@@ -17,14 +19,16 @@ $ go build
 $ ./rest-api
 ```
 
+---
 ### API design
 `/get/{id}`
 - Fetches user by ID from the database.
 - Returns a json response back.
 - Method `GET`
 
+---
 `/create`
-- Creates a new user and add him/her in the Database.
+- Creates a new user and adds him/her in the Database.
 - Requires a json request body as such,
 - Method `POST`
 
@@ -37,11 +41,19 @@ $ ./rest-api
 }
 ```
 
+---
 `/update/{id}`
-- Updates users data and saves it into the database.
+- Updates user data and saves it into the database.
 - Requires a json request body as mentioned above.
 - Method `PUT`
+```json
+{
+    "description": "Hey, I am a Math genius"
+}
+```
 
+---
 `/delete/{id}`
-- Deletes user by it ID.
-- All the user's data is deleted from the database as well.
+- Deletes user by his/her ID.
+- User's data is deleted from the database as well.
+- Method `DELETE`
