@@ -1,59 +1,57 @@
 # Rest-API
 
 ## Framework / toolkit
-Gorilla Mux - [Link](https://github.com/gorilla/mux)
+1. Go Fiber
+2. Ginkgo
+3. Testify/mock
+4. Mockery(cli tool to autogenerate mocks)
 
----
 ## Functionality
 1. The API follows typical RESTful API design patterns.
 2. The data is save in a DB
 
----
 ## Documentation
-
 ### Setting up
 ```bash
 $ git clone https://github.com/Murtaza-Udaipurwala/rest-api
 $ cd rest-api
+$ git switch mongoDB
 $ go build
 $ ./rest-api
 ```
 
----
 ### API design
-`/get/{id}`
+`/user` (Method `GET`)
+- Fetches all users from the database
+- Returns a json response back.
+
+`/user/{id}` (Method `GET`)
 - Fetches user by ID from the database.
 - Returns a json response back.
-- Method `GET`
 
----
-`/create`
+`/user` (Method `POST`)
 - Creates a new user and adds him/her in the Database.
 - Requires a json request body as such,
-- Method `POST`
 
 ```json
 {
-    "name": "Murtaza Udaipurwala",
-    "dob": "2002-12-09",
-    "address": "India",
-    "description": "Hey, I am a computer genius"
+    "username": "Murtaza Udaipurwala",
+    "password": "tryguessingit",
 }
 ```
 
 ---
-`/update/{id}`
-- Updates user data and saves it into the database.
+`/update/{id}` (Method `PUT`)
+- Updates user data and saves it to the database.
 - Requires a json request body as mentioned above.
-- Method `PUT`
+
 ```json
 {
-    "description": "Hey, I am a Math genius"
+    "password": "nottryguessingthis"
 }
 ```
 
 ---
-`/delete/{id}`
+`/delete/{id}` (Method `DELETE`)
 - Deletes user by his/her ID.
 - User's data is deleted from the database as well.
-- Method `DELETE`
