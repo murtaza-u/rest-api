@@ -1,59 +1,29 @@
 package main
 
 import (
-	"errors"
+	"context"
 	"log"
+    "time"
 
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var db *gorm.DB
+const (
+    dbName = "users"
+    URI = "mongodb://127.0.0.1:27017/" + dbName
+)
 
-// initialise DB
-func initDB() (db *gorm.DB) {
-    db, err := gorm.Open(sqlite.Open("users.db"), &gorm.Config{})
+func Connect() *mongo.Database {
+    client, err := mongo.NewClient(options.Client().ApplyURI(URI))
     if err != nil {
         log.Panic(err)
     }
 
-    // auto migrate tables, columns, rows
-    db.AutoMigrate(&User{})
-    return db
-}
+    ctx, cancel := context.WithTimeout(context.Background(), time.Second * 45)
+    defer cancel()
 
-func createUser(name, dob, address, description string) error {
-    user := User{
-        Name: name,
-        Dob: dob,
-        Address: address,
-        Description: description,
-    }
+    client.Connect(ctx)
 
-    // creates a new row in the database
-    db.Create(&user)
-
-    return nil
-}
-
-func getUserByID(id string) (User, error) {
-    var user User
-    db.Where("id = ?", id).Find(&user)
-
-    // incase the user does not exist, return an error
-    if len(user.Name) == 0 {
-        return user, errors.New("user not found")
-    }
-    return user, nil
-}
-
-func deleteUser(id string) error {
-    user, err := getUserByID(id)
-    if err != nil {
-        return err
-    }
-
-    // deletes specified row from the database
-    db.Delete(&user, user.ID)
-    return nil
+    return client.Database(dbName)
 }
